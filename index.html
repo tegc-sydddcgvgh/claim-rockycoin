@@ -9,6 +9,14 @@
             padding: 0;
             margin: 0;
             box-sizing: border-box;
+            -webkit-touch-callout: none; /* Disable callout (e.g., highlight) on iOS */
+            -webkit-user-select: none; /* Disable text selection on iOS */
+            -moz-user-select: none; /* Disable text selection on Firefox */
+            -ms-user-select: none; /* Disable text selection on IE10+ */
+            user-select: none; /* Standard syntax */
+        }
+          html {
+            touch-action: manipulation; /* Prevent double-tap to zoom */
         }
         /* Global Styles */
         body {
@@ -271,6 +279,16 @@
         // Initialize game state on page load
         updatePointsDisplay();
         checkCooldown(); // Check cooldown state on page load
+
+          document.addEventListener('gesturestart', function (event) {
+            event.preventDefault();
+        });
+
+        document.addEventListener('touchstart', function (event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>
