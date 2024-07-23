@@ -3,55 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tap to Earn Game</title>
+    <title>Rocky Coin</title>
+    <link rel="shortcut icon" href="./WhatsApp Image 2024-07-23 at 12.29.29_eec262cb.jpg" type="image/x-icon">
+    <script src="https://kit.fontawesome.com/7dbb2c7d34.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:700,700,700&display=swap">
     <style>
-        *{
+        * {
             padding: 0;
             margin: 0;
             box-sizing: border-box;
-            -webkit-touch-callout: none; /* Disable callout (e.g., highlight) on iOS */
-            -webkit-user-select: none; /* Disable text selection on iOS */
-            -moz-user-select: none; /* Disable text selection on Firefox */
-            -ms-user-select: none; /* Disable text selection on IE10+ */
-            user-select: none; /* Standard syntax */
         }
-          html {
-            touch-action: manipulation; /* Prevent double-tap to zoom */
-        }
+
         /* Global Styles */
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f0f4f8;
-            color: #333;
+            background: linear-gradient(145deg, #FFDEE9, #B5FFFC);
+            color: #fff;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow: hidden; /* Prevent scrolling while loading */
+        }
+
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .spinner {
+            border: 5px solid #f3f3f3; /* Light grey */
+            border-top: 5px solid #007bff; /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .container {
             width: 90%;
             max-width: 600px;
-            background-color: #fff;
+            background: linear-gradient(145deg, #f50d5b, #0af0e8);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
             position: relative;
+            opacity: 0; /* Start invisible, fade in after loading */
+            transition: opacity 0.5s ease-in-out;
         }
         @media (max-width:700px) {
-            .container{
+            .container {
                 width: 100%;
-                background-color: rgb(235, 240, 245);
+                background: linear-gradient(145deg, #f50d5b, #0af0e8);
             }
         }
 
         h1 {
             font-size: 2.5em;
             margin-bottom: 20px;
-            color: #007bff;
+            color: #ffffff;
         }
 
         .game {
@@ -62,7 +89,6 @@
         }
 
         .points, .limit-info {
-            /* font-size: 1.5em; */
             font-size: larger;
             margin-bottom: 20px;
         }
@@ -71,13 +97,14 @@
             height: 300px;
             width: 300px;
             border-radius: 50%;
-            font-size: 1.2em;
+            font-size: 10em;
             color: #fff;
-            background-color: #007bff;
-            border: none;
+            background: linear-gradient(135deg, #f0f4f8, rgba(255, 0, 0, 0.822), #9fa8da, #b39ddb);
+            border: 20px solid rgb(162, 211, 253);
             cursor: pointer;
             transition: background-color 0.3s;
             margin-bottom: 20px;
+            box-shadow: 0px 0px 10px rgb(3, 137, 255);
         }
 
         .tap-button:hover {
@@ -87,6 +114,7 @@
         .tap-button:active {
             transform: scale(1.05);
             transition: transform 0.3s;
+            background-color: #0056b3;
         }
 
         .upgrades {
@@ -129,7 +157,7 @@
             font-size: 1.2em;
             color: #28a745;
             opacity: 0;
-            transition: opacity 0.5s ease-out, transform .5s ease-out;
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
             transform: translateY(-10px);
         }
 
@@ -137,37 +165,26 @@
             opacity: 1;
             transform: translateY(0);
         }
-         .fade-in {
-            animation: fadeIn 2s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
     </style>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,500,700&display=swap">
 </head>
 <body>
-    <div class="container fade-in">
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+    <div class="container">
         <h1>Rocky Coin</h1>
         <div class="game">
             <p class="points">Points: <span id="points">0</span></p>
             
-            <button class="tap-button" id="tapButton" onclick="earnPoints()">Tap to Earn</button>
+            <button class="tap-button" id="tapButton" onclick="earnPoints()">R</button>
 
-            <p class="limit-info">Tap Limit: <span id="tapsToday">0</span> / <span id="dailyLimit">1000</span></p>
+            <p class="limit-info"><i class="fa-solid fa-bolt"></i> &nbsp;:&nbsp; <span id="tapsToday">0</span> / <span id="dailyLimit">1000</span></p>
             <div class="cooldown" id="cooldownMessage"></div>
             <div class="upgrades">
                 <h3>Multitap</h3><br>
-                <button class="upgrade-button" onclick="buyUpgrade(1)">Upgrade 1 (+1 points/tap, Cost: 50 points)</button>
-                <button class="upgrade-button" onclick="buyUpgrade(2)">Upgrade 2 (+5 points/tap, Cost: 200 points)</button>
-                <button class="upgrade-button" onclick="buyUpgrade(3)">Upgrade 3 (+10 points/tap, Cost: 500 points)</button>
+                <button class="upgrade-button" onclick="buyUpgrade(1)">Upgrade 1 (+1 points/tap, Cost: 1,000 points)</button>
+                <button class="upgrade-button" onclick="buyUpgrade(2)">Upgrade 2 (+5 points/tap, Cost: 5,000 points)</button>
+                <button class="upgrade-button" onclick="buyUpgrade(3)">Upgrade 3 (+10 points/tap, Cost: 10,000 points)</button>
             </div>
             <div id="pointsAdded" class="points-added"></div>
         </div>
@@ -185,7 +202,7 @@
         let cooldownEnd = parseInt(localStorage.getItem('cooldownEnd')) || 0;
 
         // Upgrade costs and values
-        const upgradeCosts = [50, 200, 500];
+        const upgradeCosts = [1000, 5000, 10000];
         const upgradeValues = [1, 5, 10];
 
         // Update display
@@ -250,7 +267,7 @@
             pointsAddedElement.classList.add('show');
             setTimeout(() => {
                 pointsAddedElement.classList.remove('show');
-            }, 800); // Hide after 0.5 seconds
+            }, 500); // Hide after 0.5 seconds
         }
 
         // Earn points on tap
@@ -279,14 +296,13 @@
             const value = upgradeValues[upgradeIndex - 1];
 
             if (points >= cost) {
-                alert('Upgrade sucessfull');
                 points -= cost;
                 pointsPerTap += value;
                 tapsToday -= value; // Deduct the exact number of taps corresponding to the upgrade value
                 updatePointsDisplay();
                 saveGameState();
             } else {
-                alert('Not enough coin for this upgrade.');
+                alert('Not enough points for this upgrade.');
             }
         }
 
@@ -294,15 +310,15 @@
         updatePointsDisplay();
         checkCooldown(); // Check cooldown state on page load
 
-          document.addEventListener('gesturestart', function (event) {
-            event.preventDefault();
+        // Add event listener to hide preloader once page is fully loaded
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('preloader');
+            preloader.style.opacity = '0';
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 500); // fade out effect
+            document.querySelector('.container').style.opacity = '1'; // Fade in container
         });
-
-        document.addEventListener('touchstart', function (event) {
-            if (event.touches.length > 1) {
-                event.preventDefault();
-            }
-        }, { passive: false });
     </script>
 </body>
 </html>
