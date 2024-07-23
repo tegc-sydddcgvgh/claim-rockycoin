@@ -13,6 +13,20 @@
             margin: 0;
             box-sizing: border-box;
         }
+        /* Prevent text selection */
+* {
+    -webkit-touch-callout: none; /* Disable callout (e.g., highlight) on iOS */
+    -webkit-user-select: none; /* Disable text selection on iOS */
+    -moz-user-select: none; /* Disable text selection on Firefox */
+    -ms-user-select: none; /* Disable text selection on IE10+ */
+    user-select: none; /* Standard syntax */
+}
+
+/* Prevent zooming on double-tap */
+html {
+    touch-action: manipulation; /* Prevent double-tap to zoom */
+}
+
 
         /* Global Styles */
         body {
@@ -319,6 +333,16 @@
             }, 500); // fade out effect
             document.querySelector('.container').style.opacity = '1'; // Fade in container
         });
+           // Prevent double-tap zoom on mobile devices
+        document.addEventListener('gesturestart', function (event) {
+            event.preventDefault();
+        });
+
+        document.addEventListener('touchstart', function (event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>
